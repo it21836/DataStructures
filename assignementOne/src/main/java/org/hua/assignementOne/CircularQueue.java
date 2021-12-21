@@ -1,20 +1,26 @@
-package org.hua.assignementOne;
+package org.hua.circularqueue;
 
 import java.util.NoSuchElementException;
 
-//A FIFO Queue implemented with circular array.
+/**
+ * This code is part of the 1st assignment for the Data Structures course at 
+ * Harokopio University of Athens, Dept. of Informatics and Telematics.
+ * @authors 21860 | 21836
+ * 
+ * A FIFO queue implemented with a Circular Array.
+ * @param <E> the element type
+ */
 
 public class CircularQueue<E> implements Queue<E>{
 	
 	//private instances 
-	
+	private E[] CircularQueueArray;
 	public static final int DEFAULT_CAPACITY=64;
 	
 	private int front; // shows the first element
 	private int rear; //shows the first empty space
-	private int currentsize; // shows how many elements are currently in the queue
-	private E[] circularArray;
-	private int arrayLenght;
+	private int currentSize; // shows how many elements are currently in the queue
+	private int arrayLength;
 	
 	//constructors
 	
@@ -22,48 +28,53 @@ public class CircularQueue<E> implements Queue<E>{
 		this(DEFAULT_CAPACITY);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public CircularQueue(int capacity) {
 		if(capacity <= 0 ) {
-			throw new IllegalArgumentException("Wrong capacity.");
+			throw new IllegalArgumentException("Wrong capacity!");
 		}
+		this.CircularQueueArray = (E[])new Object[capacity];
 		this.front=0;
 		this.rear=0;
-		this.currentsize=0;
-		this.circularArray = (E[]) new Object[capacity];
-		this.arrayLenght=circularArray.length;
+		this.currentSize=0;
+		this.arrayLength=CircularQueueArray.length; 
 		
 	}
 	
 	//Implemented methods from interface
 	
 	@Override
-	public void enqueue(E elem) {
+	/**
+         * Adds element always at rear position
+     	 */
+	public void enqueue(E element) {
 		//When queue is full
-		if(size()==circularArray.length) {
+		if(size()==CircularQueueArray.length) {
 			doubleCapacity();
 		}
 		//When there is space
-		circularArray[rear%circularArray.length]=elem;
+		CircularQueueArray[rear%CircularQueueArray.length]=element;
 		rear++;
-		currentsize++;
+		currentSize++;
 	}
 
 	@Override
+	 /**
+     	  * Removes element always from front position
+   	  */
 	public E dequeue() {
 		//If is empty
 		if(isEmpty()) {
-			throw new NoSuchElementException();
+			throw new NoSuchElementException("The queue is empty");
 		}
 		
 		//If there is space
-		E result = circularArray[front%circularArray.length];
-		circularArray[front%circularArray.length]=null;
+		E result = CircularQueueArray[front%CircularQueueArray.length];
+		CircularQueueArray[front%CircularQueueArray.length]=null;
 		front++;
-		currentsize--;
+		currentSize--;
 		
 		//if there is more than 3/4 of the cells free decrease the capacity
-		if(currentsize <= circularArray.length/4) {
+		if(currentSize <= CircularQueueArray.length/4) {
 			halfCapacity();
 		}
 		
@@ -74,10 +85,9 @@ public class CircularQueue<E> implements Queue<E>{
 	public E front() {
 		//if there is no element in the queue
 		if(isEmpty()) {
-			throw new NoSuchElementException();
+			throw new NoSuchElementException("The queue is empty");
 		}
-		
-		return circularArray[front%circularArray.length];
+		return CircularQueueArray[front%CircularQueueArray.length];
 	}
 
 	@Override
@@ -87,22 +97,22 @@ public class CircularQueue<E> implements Queue<E>{
 
 	@Override
 	public int size() {
-		//its empty
+		// empty
 		if(front == rear) {
 			return 0;
 		}
-		//its full
-		else if((rear-front )==circularArray.length){
-			return circularArray.length;
+		// full
+		else if((rear-front)==CircularQueueArray.length){
+			return CircularQueueArray.length;
 		}
 		//it has some elements
 		else if(front > rear) {
-			return rear-front+circularArray.length;
+			return rear-front+CircularQueueArray.length;
 		}
 		else if(front < rear) {
 			return rear-front;
 		} 
-		//something has gone really wrong?
+		
 		return -1;
 	}
 
@@ -110,44 +120,43 @@ public class CircularQueue<E> implements Queue<E>{
 	public void clear() {
 		//if there is no queue to clear
 		if(isEmpty()) {
-				throw new NoSuchElementException();
+			throw new NoSuchElementException("The queue is empty!");
 		}
 		
-		for(int i=0 ; i<circularArray.length;i++) {
-			circularArray[i]=null;	
+		for(int i=0 ; i<CircularQueueArray.length;i++) {
+			CircularQueueArray[i]=null;	
 		}
-		this.front=0;
-		this.rear=0;
-		this.currentsize=0;
+		 this.front=this.rear=this.currentSize=this.arrayLength=0;
 	
 	}
 	
 	private void doubleCapacity() {
-		int newCapacity = circularArray.length * 2;
-		@SuppressWarnings("unchecked")
+		int newCapacity = 2 * CircularQueueArray.length;
 		E[] newArray = (E[]) new Object[newCapacity];
-		for(int i = 0;i<circularArray.length;i++){
-			newArray[i]=circularArray[front++%circularArray.length];
+		
+		for(int i = 0;i<CircularQueueArray.length;i++){
+			newArray[i]=CircularQueueArray[front++%CircularQueueArray.length];
 		}
-		circularArray=newArray;
+		CircularQueueArray=newArray;
 		front=0;
-		rear=currentsize ;
-		arrayLenght=circularArray.length;
+		rear=currentSize ;
+		arrayLength=CircularQueueArray.length;
 		
 		
 	}
 	
 	private void halfCapacity() {
-		int newCapacity = circularArray.length /2;
-		@SuppressWarnings("unchecked")
+		int newCapacity = CircularQueueArray.length/2;
 		E[] newArray = (E[]) new Object[newCapacity];
-		for(int i = 0;i<currentsize;i++){
-			newArray[i]=circularArray[front++%circularArray.length];
+		
+		for(int i = 0;i<currentSize;i++){
+			newArray[i]=CircularQueueArray[front++%CircularQueueArray.length];
 		}
-		circularArray=newArray;
+		currentSize=newArray.length;
+		CircularQueueArray=newArray;
 		front=0;
-		rear=currentsize;
-		arrayLenght=circularArray.length;
+		rear=currentSize;
+		arrayLenght=CircularQueueArray.length;
 	} 
 	
 	//getters & setters 
@@ -168,28 +177,28 @@ public class CircularQueue<E> implements Queue<E>{
 		this.rear = rear;
 	}
 
-	public int getCurrentsize() {
-		return currentsize;
+	public int getCurrentSize() {
+		return currentSize;
 	}
 
-	public void setCurrentsize(int currentsize) {
-		this.currentsize = currentsize;
+	public void setCurrentSize(int currentSize) {
+		this.currentSize = currentSize;
 	}
 
-	public E[] getCircularArray() {
-		return circularArray;
+	public E[] getCircularQueueArray() {
+		return CircularQueueArray;
 	}
 
-	public void setCircularArray(E[] circularArray) {
-		this.circularArray = circularArray;
+	public void setCircularQueueArray(E[] CircularQueueArray) {
+		this.CircularQueueArray = CircularQueueArray;
 	}
 	
-	public int getArrayLenght() {
-		return this.arrayLenght;
+	public int getArrayLength() {
+		return this.arrayLength;
 	}
 	
-	public void setArrayLengt(E[] circularArray) {
-		this.arrayLenght=circularArray.length;
+	public void setArrayLength(E[] CircularQueueArray) {
+		this.arrayLength=CircularQueueArray.length;
 	}
 	
 	
@@ -197,8 +206,8 @@ public class CircularQueue<E> implements Queue<E>{
 	    if (!isEmpty()) {
 	        int i = front;
 	        do {
-	            System.out.print(" " + circularArray[i]);
-	            i = ++i % circularArray.length;
+	            System.out.print(" " + CircularQueueArray[i]);
+	            i = ++i % CircularQueueArray.length;
 	        }
 	        while (i != rear);
 	    }
