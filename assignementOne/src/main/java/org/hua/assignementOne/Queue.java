@@ -1,6 +1,9 @@
-package org.hua.assignementOne;
+package org.hua.circularqueue;
 
-//A FIFO Queue interface.
+/**
+ * A FIFO queue interface.
+ * @param <E>
+ */
 
 public interface Queue<E>{
 
