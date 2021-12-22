@@ -33,13 +33,11 @@ public class CircularQueueApp
     	
     	
     	//leave in the 1/4 of the elements
-    	int s= (3*q.getArrayLength())/4;
+    	int s= =(3*q.size())/4;
     	for (int i=0;i<s;i++) {
     		try {   		
     	    	q.dequeue();
-    	    	}catch(Exception E) {
-    	    		//System.out.println("There is no elements to dequeue!");
-    	    	}
+    	    	}catch(Exception E) {}
     	}
     	
     	//print the queue
