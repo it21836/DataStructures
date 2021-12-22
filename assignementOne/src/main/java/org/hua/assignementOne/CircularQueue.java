@@ -152,7 +152,6 @@ public class CircularQueue<E> implements Queue<E>{
 		for(int i = 0;i<currentSize;i++){
 			newArray[i]=CircularQueueArray[front++%CircularQueueArray.length];
 		}
-		currentSize=newArray.length;
 		CircularQueueArray=newArray;
 		front=0;
 		rear=currentSize;
