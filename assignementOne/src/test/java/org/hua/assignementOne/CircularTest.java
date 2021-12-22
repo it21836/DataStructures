@@ -76,7 +76,7 @@ public class CircularTest
 		assertTrue(q.size()==q.getArrayLength());
 		
 		//leave less that 1/4 of elements inside queue
-		int s= (3*q.getArrayLength())/4;
+		int s= (3*q.size())/4;
 		for(int i=0;i<=s;i++) {
 			q.dequeue();
 		}
