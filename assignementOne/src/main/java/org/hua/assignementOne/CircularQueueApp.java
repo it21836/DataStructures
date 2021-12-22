@@ -57,14 +57,15 @@ public class CircularQueueApp
     	System.out.println();
         System.out.println("Number of elements in queue: " + q.size());
     	
-    	/*
-    	//Code to show that clear works
     	try {
         	q.clear();
         	}catch(Exception E) {
         		System.out.println("There is no elements in queue to clear!");
-        	}
-      */
+        }
+        System.out.println("This is the queue after we have cleared it: " );
+        q.print();
+        System.out.println();
+        System.out.println("Number of elements in queue: " + q.size());
     }
     	
 
