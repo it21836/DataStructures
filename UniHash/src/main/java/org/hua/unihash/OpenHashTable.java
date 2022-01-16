@@ -5,37 +5,36 @@ import java.util.NoSuchElementException;
 
 /**
  * This code is part of the 1st assignment for the Data Structures course at 
- * Harokopio University of Athens, Dept. of Informatics and Telematics.
- * @authors 21860 | 21836
+ * Harokopio University of Athens, Dept.of Informatics and Telematics.
+ * @author 21860 | 21836
  * 
  * A hashtable implemented with Open Addressing and Linear Probing 
  * using Matrix Method for Universal Hashing.
+ * @param <K>
+ * @param <V>
  */
 
 public class OpenHashTable<K, V> implements Dictionary<K, V> {
 
-    public static final int DEFAULT_INITIAL_SIZE = 17;
+    public static final int DEFAULT_INITIAL_CAPACITY = 17;
+    private Entry<K,V>[] Array;
     
-    private Entry<K,V>[] CircularArray;
+    private int capacity;
     private int size;
-    private int front;
-    private int rear;
     
     //default constructor
     public OpenHashTable() {
-        this(DEFAULT_INITIAL_SIZE);
+        this(DEFAULT_INITIAL_CAPACITY);
     }
     
     //constructor
     public OpenHashTable(int m) {
-    if(m <= 0){
+        if(m <= 0){
             throw new IllegalArgumentException("Array size must be positive!");
         }
-        this.CircularArray = (Entry<K, V>[]) new Object[m];
-        this.size = 0;
-        this.front = 0;
-        this.rear = 0;
-        
+        this.Array = (Entry<K, V>[]) new Object[m];
+        this.capacity = m;
+        this.size = 0; 
     }
     
     @Override
@@ -52,44 +51,27 @@ public class OpenHashTable<K, V> implements Dictionary<K, V> {
 
     @Override
     public V get(K key) {
-       for(var entrySet: CircularArray){
-            if(key.equals(entrySet.getKey())){
-                return entrySet.getValue();
+        for(Entry<K,V> e: Array){
+            if(key.equals(e.getKey())){
+                return e.getValue();
             }    
         }
-        return null; 
+        return null;    
     }
 
     @Override
     public boolean contains(K key) {
-       for(var entrySet: CircularArray){ 
-            if(key.equals(entrySet.getKey())){
-                return true;
-            }    
-        }
-        return false;
+        return get(key) != null;
     }
 
     @Override
     public boolean isEmpty() {
-        return front == rear;
+        return size() == 0;
     }
 
     @Override
     public int size() {
-        if(front == rear) {
-            return 0;
-	}
-	else if((rear-front)==CircularArray.length){
-            return CircularArray.length;
-	}
-	else if(front > rear) {
-            return rear-front+CircularArray.length;
-	}
-	else if(front < rear) {
-            return rear-front;
-	}
-	return -1;
+        return size;
     }
 
     @Override
@@ -97,10 +79,10 @@ public class OpenHashTable<K, V> implements Dictionary<K, V> {
         if(isEmpty()){
             throw new NoSuchElementException("The queue is empty!");
         }
-        for (int i=0; i<CircularArray.length; i++){
-            CircularArray[i]=null;
+        for (int i=0; i<Array.length; i++){
+            Array[i]=null;
         }
-        this.front=this.rear=this.size=0;
+        this.size=0;
     }
 
     
@@ -127,14 +109,11 @@ public class OpenHashTable<K, V> implements Dictionary<K, V> {
     }
     
     private void insert(K key, V value){
-        //TODO 
-        
-        int i = hash(key);
-        //while it has next
+        //TODO
     }
     
-    private int hash(K key){
-        return Math.abs(key.hashCode()) % CircularArray.length;
+    private Entry<K,V> hash(K key){
+        return Array[Math.abs(key.hashCode()) % Array.length];
     }
     
     public void rehashIfNeeded() {
@@ -166,8 +145,7 @@ public class OpenHashTable<K, V> implements Dictionary<K, V> {
         }
     }
     
-    public boolean isFull()
-    {
-        return size == CircularArray.length;
+    public boolean isFull() {
+        return size == Array.length;
     }
 }
