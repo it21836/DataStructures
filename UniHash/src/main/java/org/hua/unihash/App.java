@@ -2,7 +2,7 @@
  * This code is part of the exercises for the Data Structures course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  * 
- * @author Manouseli Kalliopi Despoina - Karakasidou Aikaterini
+ * @author 21860 | 21836
  */
 package org.hua.unihash;
 
