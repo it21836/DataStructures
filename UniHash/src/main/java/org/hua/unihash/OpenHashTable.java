@@ -93,17 +93,37 @@ public class OpenHashTable<K, V> implements Dictionary<K, V> {
     
     private class HashIterator implements Iterator<Entry<K,V>> {
 
+        private int i;
+        private Iterator<Entry<K,V>> it;
+        
+        //constructor
+        public HashIterator(){
+            i=0;
+            it=Αrray[0].iterator();
+        }
+        
         @Override
         public boolean hasNext() {
-            //TODO
+            if(it.hasNext()){
+                return true;
+            }
+            //προχώρα προς τα δεξιά και προς τα κάτω για να δεις αν υπάρχουν άλλα στοιχεία
+            while(i < array.length-1){
+                i++;
+                it = array[i].iterator();
+                if(it.hasNext()){
+                    return true;
+                }
+            }
             return false;
-            
         }
 
         @Override
         public Entry<K, V> next() {
-            //TODO
-            return null;
+           if(!hasNext()){
+                throw new NoSuchElementException("There is no next element!");
+            }
+            return it.next();
         }
         
     }
